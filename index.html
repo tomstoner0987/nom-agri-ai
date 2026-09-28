@@ -11,8 +11,9 @@
 .panel{display:none}.panel.active{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:780px){.grid{grid-template-columns:1fr}}
 .card{background:white;border:1px solid #dfe8df;border-radius:18px;padding:20px;box-shadow:0 8px 28px #173d1110;margin-bottom:18px}.card h2{margin-top:0;font-size:20px}
 label{display:block;font-weight:700;font-size:14px;margin:13px 0 6px}input,select{width:100%;padding:12px;border:1px solid #ccd9ce;border-radius:10px;font-size:16px;background:#fff}button{width:100%;margin-top:16px;padding:14px;border:0;border-radius:11px;background:#173f23;color:white;font-size:16px;font-weight:800;cursor:pointer}
-.results{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#f3f7f2;border-radius:12px;padding:14px}.metric small{color:#617365}.metric strong{display:block;font-size:21px;margin-top:4px}.profit{background:#e3f4e5}.warning{background:#fff4dc}.good{background:#e5f5e8}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#f3f7f2;border-radius:12px;padding:14px}.metric small{color:#617365}.metric strong{display:block;font-size:21px;margin-top:4px}.profit{background:#e3f4e5}.warning{background:#fff4dc}.good{background:#e5f5e8}.danger{background:#fde7e7}
 .note{font-size:12px;color:#718078;margin-top:13px;line-height:1.5}.calendar{display:grid;gap:10px}.stage{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:13px;border-radius:12px;background:#f3f7f2}.stage b{color:#173f23}.waterbox{display:grid;grid-template-columns:1fr 1fr;gap:10px}.footer{text-align:center;color:#738078;padding:24px 0}
+.forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}@media(max-width:780px){.forecast{grid-template-columns:repeat(2,1fr)}}.day{background:#f3f7f2;border-radius:12px;padding:12px}.day b{display:block;margin-bottom:5px}.status{display:inline-block;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:800;margin-top:8px}.status.good{background:#e5f5e8}.status.warning{background:#fff4dc}.status.danger{background:#fde7e7}
 </style>
 </head>
 <body>
@@ -20,13 +21,13 @@ label{display:block;font-weight:700;font-size:14px;margin:13px 0 6px}input,selec
 <section class="hero">
 <span class="badge">🌱 Nom Agri AI • Nepal</span>
 <h1>Know your farm before you plant.</h1>
-<p>Farm economics + water planning + crop calendar + weather-risk screening in one simple decision-support tool.</p>
+<p>Farm economics + water planning + live weather + crop-risk screening + crop calendar in one simple decision-support tool.</p>
 </section>
 
 <div class="tabs">
 <button class="tab active" onclick="showTab('economics',this)">💰 Economics</button>
 <button class="tab" onclick="showTab('water',this)">💧 Water</button>
-<button class="tab" onclick="showTab('weather',this)">🌦️ Weather</button>
+<button class="tab" onclick="showTab('weather',this)">🌦️ Live Weather</button>
 <button class="tab" onclick="showTab('calendar',this)">📅 Crop Calendar</button>
 </div>
 
@@ -52,16 +53,11 @@ label{display:block;font-weight:700;font-size:14px;margin:13px 0 6px}input,selec
 <div class="card">
 <h2 id="resultTitle">Tomato economics</h2>
 <div class="results">
-<div class="metric"><small>Total production</small><strong id="production">—</strong></div>
-<div class="metric"><small>Revenue</small><strong id="revenue">—</strong></div>
-<div class="metric"><small>Total cost</small><strong id="cost">—</strong></div>
-<div class="metric profit"><small>Estimated profit</small><strong id="profit">—</strong></div>
-<div class="metric"><small>Profit margin</small><strong id="margin">—</strong></div>
-<div class="metric"><small>Break-even price</small><strong id="beprice">—</strong></div>
-<div class="metric"><small>Break-even yield</small><strong id="beyield">—</strong></div>
-<div class="metric"><small>ROI</small><strong id="roi">—</strong></div>
-</div>
-</div>
+<div class="metric"><small>Total production</small><strong id="production">—</strong></div><div class="metric"><small>Revenue</small><strong id="revenue">—</strong></div>
+<div class="metric"><small>Total cost</small><strong id="cost">—</strong></div><div class="metric profit"><small>Estimated profit</small><strong id="profit">—</strong></div>
+<div class="metric"><small>Profit margin</small><strong id="margin">—</strong></div><div class="metric"><small>Break-even price</small><strong id="beprice">—</strong></div>
+<div class="metric"><small>Break-even yield</small><strong id="beyield">—</strong></div><div class="metric"><small>ROI</small><strong id="roi">—</strong></div>
+</div></div>
 </div>
 </section>
 
@@ -71,34 +67,33 @@ label{display:block;font-weight:700;font-size:14px;margin:13px 0 6px}input,selec
 <h2>💧 Water requirement</h2>
 <label>Crop</label><select id="waterCrop" onchange="waterChanged()"><option>Tomato</option><option>Potato</option><option>Cauliflower</option><option>Cucumber</option><option>Chilli</option><option>Maize</option><option>Rice</option><option>Wheat</option></select>
 <label>Area (hectares)</label><input id="waterArea" type="number" min="0" step="0.01" value="0.1" oninput="waterChanged()">
-<div class="waterbox">
-<div class="metric"><small>Indicative seasonal water</small><strong id="seasonWater">—</strong></div>
-<div class="metric"><small>Indicative weekly need</small><strong id="weekWater">—</strong></div>
+<div class="waterbox"><div class="metric"><small>Indicative seasonal water</small><strong id="seasonWater">—</strong></div><div class="metric"><small>Indicative weekly need</small><strong id="weekWater">—</strong></div></div>
+<p class="note">Planning ranges, not irrigation prescriptions. Actual need changes with climate, soil, crop stage, rainfall and irrigation efficiency.</p>
 </div>
-<p class="note">These are planning ranges, not irrigation prescriptions. Actual crop water need changes with climate, soil, crop stage, rainfall and irrigation efficiency.</p>
-</div>
-<div class="card">
-<h2>How to use it</h2>
-<p>Use the water estimate to compare crop choices and size an irrigation plan. Later, Nom Agri AI can connect this module to rainfall forecasts, soil data and local evapotranspiration data for a more precise recommendation.</p>
-</div>
+<div class="card"><h2>How to use it</h2><p>Use the estimate to compare crop choices and size an irrigation plan. Live weather now adds a location-based planning layer.</p></div>
 </div>
 </section>
 
 <section id="weather" class="panel">
 <div class="grid">
 <div class="card">
-<h2>🌦️ Weather factor</h2>
-<p class="note">Enter the expected growing-season conditions. The tool screens them against a simple crop suitability range.</p>
+<h2>🌦️ Live weather & crop risk</h2>
+<p class="note">Choose a Nepal location, then fetch current conditions and a 5-day forecast. Weather data comes from Open-Meteo; its free API is for non-commercial use, so commercial deployment should use its commercial API/licence. </p>
+<label>Location in Nepal</label>
+<input id="location" value="Kawasoti, Nepal" placeholder="e.g. Kawasoti, Nepal">
 <label>Crop</label><select id="weatherCrop" onchange="weatherChanged()"><option>Tomato</option><option>Potato</option><option>Cauliflower</option><option>Cucumber</option><option>Chilli</option><option>Maize</option><option>Rice</option><option>Wheat</option></select>
-<label>Expected average temperature (°C)</label><input id="temp" type="number" value="24" oninput="weatherChanged()">
-<label>Expected rainfall during crop cycle (mm)</label><input id="rain" type="number" value="500" oninput="weatherChanged()">
-<div id="weatherResult" class="metric good"><small>Weather suitability</small><strong>—</strong></div>
-<p class="note">This is a screening factor, not a forecast. A future version can pull live weather and forecast data automatically.</p>
+<button onclick="loadWeather()">📍 Get live weather & crop risk</button>
+<div id="weatherStatus" class="note">No live data loaded yet.</div>
+<div class="results">
+<div class="metric"><small>Current temperature</small><strong id="liveTemp">—</strong></div><div class="metric"><small>Current rain</small><strong id="liveRain">—</strong></div>
+<div class="metric"><small>Today's rain</small><strong id="todayRain">—</strong></div><div class="metric"><small>7-day ET₀</small><strong id="et0">—</strong></div>
+</div>
 </div>
 <div class="card">
-<h2>Weather-adjusted planning</h2>
-<div class="metric"><small>Suggested planning factor</small><strong id="weatherFactor">100%</strong></div>
-<p id="weatherAdvice" class="note">Enter conditions to see a planning flag.</p>
+<h2>Crop risk screen</h2>
+<div id="liveRisk" class="metric good"><small>Risk status</small><strong>Load weather</strong></div>
+<div class="forecast" id="forecast"></div>
+<p class="note">This is a decision-support screen, not a disease forecast or agronomic prescription. Temperature and rainfall thresholds are indicative planning ranges.</p>
 </div>
 </div>
 </section>
@@ -108,12 +103,13 @@ label{display:block;font-weight:700;font-size:14px;margin:13px 0 6px}input,selec
 <h2>📅 Crop calendar</h2>
 <label>Crop</label><select id="calCrop" onchange="renderCalendar()"><option>Tomato</option><option>Potato</option><option>Cauliflower</option><option>Cucumber</option><option>Chilli</option><option>Maize</option><option>Rice</option><option>Wheat</option></select>
 <div id="calendarList" class="calendar"></div>
-<p class="note">Calendar windows are generalized Nepal planning guides. Local altitude, variety, irrigation and season can shift the dates.</p>
+<p class="note">Generalized Nepal planning guides. Local altitude, variety, irrigation and season can shift dates.</p>
 </div>
 </section>
 
-<div class="footer">Built for Nepal agriculture • Nom Agri AI</div>
+<div class="footer">Built for Nepal agriculture • Nom Agri AI • Weather data attribution: Open-Meteo</div>
 </div>
+
 <script>
 const n=id=>Number(document.getElementById(id).value)||0;
 const fmt=x=>new Intl.NumberFormat('en-NP',{maximumFractionDigits:0}).format(x);
@@ -128,11 +124,38 @@ Rice:{water:1200,weekly:80,temp:[22,32],rain:[800,1600],calendar:[['Nursery','Ma
 Wheat:{water:450,weekly:25,temp:[12,24],rain:[300,600],calendar:[['Land prep','Oct–Nov'],['Sowing','Nov–Dec'],['Tillering','Dec–Jan'],['Grain filling','Feb–Mar'],['Harvest','Mar–Apr']]}
 };
 function showTab(id,btn){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
-function calculate(){const area=n('area'),y=n('yield'),price=n('price'),production=area*y,revenue=production*price,cost=n('seed')+n('fert')+n('protect')+n('labour')+n('other'),profit=revenue-cost,margin=revenue?profit/revenue*100:0,bep=production?cost/production:0,bey=price?cost/price:0,roi=cost?profit/cost*100:0;document.getElementById('resultTitle').textContent=(document.getElementById('crop').value||'Farm')+' economics';['production','revenue','cost','profit'].forEach((id,i)=>document.getElementById(id).textContent=[''+fmt(production)+' kg','NPR '+fmt(revenue),'NPR '+fmt(cost),'NPR '+fmt(profit)][i]);document.getElementById('margin').textContent=margin.toFixed(1)+'%';document.getElementById('beprice').textContent='NPR '+bep.toFixed(2)+'/kg';document.getElementById('beyield').textContent=fmt(bey)+' kg';document.getElementById('roi').textContent=roi.toFixed(1)+'%'}
-function cropChanged(){document.getElementById('waterCrop').value=document.getElementById('crop').value;document.getElementById('weatherCrop').value=document.getElementById('crop').value;document.getElementById('calCrop').value=document.getElementById('crop').value;waterChanged();weatherChanged();renderCalendar()}
-function waterChanged(){const c=crops[document.getElementById('waterCrop').value],a=n('waterArea');document.getElementById('seasonWater').textContent=fmt(c.water*a*10000/1000)+' m³';document.getElementById('weekWater').textContent=fmt(c.weekly*a*10000/1000)+' m³'}
-function weatherChanged(){const name=document.getElementById('weatherCrop').value,c=crops[name],t=n('temp'),r=n('rain'),tOk=t>=c.temp[0]&&t<=c.temp[1],rOk=r>=c.rain[0]&&r<=c.rain[1],score=(tOk?50:20)+(rOk?50:20),factor=score>=90?100:score>=70?85:60;document.getElementById('weatherResult').className='metric '+(score>=90?'good':score>=70?'warning':'warning');document.getElementById('weatherResult').innerHTML='<small>Weather suitability</small><strong>'+score+' / 100</strong>';document.getElementById('weatherFactor').textContent=factor+'%';document.getElementById('weatherAdvice').textContent=score>=90?'Conditions are within the screening ranges for this crop.':tOk?'Temperature looks suitable; check rainfall and irrigation.':rOk?'Rainfall looks suitable; temperature may create stress.':'Both temperature and rainfall are outside the screening ranges. Recheck variety, season and irrigation.'}
+function calculate(){const area=n('area'),y=n('yield'),price=n('price'),production=area*y,revenue=production*price,cost=n('seed')+n('fert')+n('protect')+n('labour')+n('other'),profit=revenue-cost,margin=revenue?profit/revenue*100:0,bep=production?cost/production:0,bey=price?cost/price:0,roi=cost?profit/cost*100:0;document.getElementById('resultTitle').textContent=(document.getElementById('crop').value||'Farm')+' economics';document.getElementById('production').textContent=fmt(production)+' kg';document.getElementById('revenue').textContent='NPR '+fmt(revenue);document.getElementById('cost').textContent='NPR '+fmt(cost);document.getElementById('profit').textContent='NPR '+fmt(profit);document.getElementById('margin').textContent=margin.toFixed(1)+'%';document.getElementById('beprice').textContent='NPR '+bep.toFixed(2)+'/kg';document.getElementById('beyield').textContent=fmt(bey)+' kg';document.getElementById('roi').textContent=roi.toFixed(1)+'%'}
+function cropChanged(){const c=document.getElementById('crop').value;['waterCrop','weatherCrop','calCrop'].forEach(id=>document.getElementById(id).value=c);waterChanged();weatherChanged();renderCalendar()}
+function waterChanged(){const c=crops[document.getElementById('waterCrop').value],a=n('waterArea');document.getElementById('seasonWater').textContent=fmt(c.water*a*10)+' m³';document.getElementById('weekWater').textContent=fmt(c.weekly*a*10)+' m³'}
+function weatherChanged(){const name=document.getElementById('weatherCrop').value,c=crops[name],t=n('temp'),r=n('rain');if(document.getElementById('temp')){const tOk=t>=c.temp[0]&&t<=c.temp[1],rOk=r>=c.rain[0]&&r<=c.rain[1],score=(tOk?50:20)+(rOk?50:20);}}
+async function loadWeather(){
+ const status=document.getElementById('weatherStatus'),loc=document.getElementById('location').value.trim(),crop=document.getElementById('weatherCrop').value;
+ if(!loc){status.textContent='Enter a location first.';return}
+ status.textContent='Finding location and loading forecast…';
+ try{
+  const geo=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(loc)+'&count=1&language=en&format=json&countryCode=NP').then(r=>r.json());
+  if(!geo.results||!geo.results.length)throw new Error('Location not found');
+  const g=geo.results[0];
+  const url='https://api.open-meteo.com/v1/forecast?latitude='+g.latitude+'&longitude='+g.longitude+'&current=temperature_2m,precipitation,rain,relative_humidity_2m,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,et0_fao_evapotranspiration&forecast_days=5&timezone=auto';
+  const data=await fetch(url).then(r=>r.json());
+  const cur=data.current,d=data.daily,c=crops[crop];
+  document.getElementById('liveTemp').textContent=(cur.temperature_2m??'—')+' °C';
+  document.getElementById('liveRain').textContent=(cur.rain??0)+' mm';
+  const totalRain=(d.precipitation_sum||[]).reduce((a,b)=>a+(b||0),0);
+  document.getElementById('todayRain').textContent=(d.precipitation_sum?.[0]??0)+' mm';
+  const totalEt=(d.et0_fao_evapotranspiration||[]).reduce((a,b)=>a+(b||0),0);
+  document.getElementById('et0').textContent=totalEt.toFixed(1)+' mm';
+  const avgT=(d.temperature_2m_max||[]).reduce((a,b)=>a+b,0)/(d.temperature_2m_max?.length||1);
+  const tempOk=avgT>=c.temp[0]&&avgT<=c.temp[1],rainOk=totalRain>=0&&totalRain<=c.rain[1];
+  const score=(tempOk?50:20)+(rainOk?50:20);
+  const risk=score>=90?'Within screening range':score>=70?'Watch conditions':'Higher weather stress flag';
+  const cls=score>=90?'good':score>=70?'warning':'danger';
+  const box=document.getElementById('liveRisk');box.className='metric '+cls;box.innerHTML='<small>'+crop+' • '+g.name+'</small><strong>'+risk+' ('+score+'/100)</strong>';
+  document.getElementById('forecast').innerHTML=(d.time||[]).map((day,i)=>'<div class="day"><b>'+day+'</b><span>'+(d.temperature_2m_min?.[i]??'—')+'–'+(d.temperature_2m_max?.[i]??'—')+' °C</span><br><span>'+(d.precipitation_sum?.[i]??0)+' mm rain</span><br><span class="status '+(d.precipitation_probability_max?.[i]>60?'warning':'good')+'">'+(d.precipitation_probability_max?.[i]??0)+'% rain chance</span></div>').join('');
+  status.textContent='Live weather loaded for '+g.name+', '+(g.admin1||'Nepal')+'. Forecast: 5 days.';
+ }catch(e){status.textContent='Weather could not be loaded. Check the location or try again.';console.error(e)}
+}
 function renderCalendar(){const name=document.getElementById('calCrop').value;document.getElementById('calendarList').innerHTML=crops[name].calendar.map(x=>'<div class="stage"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('')}
-calculate();waterChanged();weatherChanged();renderCalendar();
+calculate();waterChanged();renderCalendar();
 </script>
 </body></html>

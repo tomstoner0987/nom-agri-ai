@@ -3,40 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nom Agri AI — Farm Profitability Calculator</title>
+<title>Nom Agri AI — Farm Decision Support</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,sans-serif;background:#f4f7f2;color:#18321f}
-.container{max-width:1050px;margin:auto;padding:28px 18px}.hero{padding:30px 0 20px}.badge{display:inline-block;background:#dcefdc;padding:7px 12px;border-radius:999px;font-size:13px;font-weight:700}.hero h1{font-size:clamp(32px,6vw,56px);margin:14px 0 8px}.hero p{font-size:17px;color:#587060;max-width:700px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:750px){.grid{grid-template-columns:1fr}}
-.card{background:white;border:1px solid #dfe8df;border-radius:18px;padding:22px;box-shadow:0 8px 28px #173d1110}.card h2{margin-top:0;font-size:20px}
-label{display:block;font-weight:700;font-size:14px;margin:14px 0 6px}input,select{width:100%;padding:12px;border:1px solid #ccd9ce;border-radius:10px;font-size:16px;background:#fff}button{width:100%;margin-top:18px;padding:14px;border:0;border-radius:11px;background:#173f23;color:white;font-size:16px;font-weight:800;cursor:pointer}
-.results{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#f3f7f2;border-radius:12px;padding:15px}.metric small{color:#617365}.metric strong{display:block;font-size:22px;margin-top:4px}.profit{background:#e3f4e5}.note{font-size:12px;color:#718078;margin-top:14px;line-height:1.5}.footer{text-align:center;color:#738078;padding:28px 0}
+.container{max-width:1100px;margin:auto;padding:24px 16px}.hero{padding:28px 0 18px}.badge{display:inline-block;background:#dcefdc;padding:7px 12px;border-radius:999px;font-size:13px;font-weight:800}.hero h1{font-size:clamp(32px,6vw,56px);margin:14px 0 8px}.hero p{font-size:17px;color:#587060;max-width:760px;line-height:1.55}
+.tabs{display:flex;gap:8px;overflow:auto;margin:10px 0 18px}.tab{white-space:nowrap;border:1px solid #ccd9ce;background:white;padding:10px 14px;border-radius:999px;font-weight:800;cursor:pointer}.tab.active{background:#173f23;color:white}
+.panel{display:none}.panel.active{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:780px){.grid{grid-template-columns:1fr}}
+.card{background:white;border:1px solid #dfe8df;border-radius:18px;padding:20px;box-shadow:0 8px 28px #173d1110;margin-bottom:18px}.card h2{margin-top:0;font-size:20px}
+label{display:block;font-weight:700;font-size:14px;margin:13px 0 6px}input,select{width:100%;padding:12px;border:1px solid #ccd9ce;border-radius:10px;font-size:16px;background:#fff}button{width:100%;margin-top:16px;padding:14px;border:0;border-radius:11px;background:#173f23;color:white;font-size:16px;font-weight:800;cursor:pointer}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#f3f7f2;border-radius:12px;padding:14px}.metric small{color:#617365}.metric strong{display:block;font-size:21px;margin-top:4px}.profit{background:#e3f4e5}.warning{background:#fff4dc}.good{background:#e5f5e8}
+.note{font-size:12px;color:#718078;margin-top:13px;line-height:1.5}.calendar{display:grid;gap:10px}.stage{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:13px;border-radius:12px;background:#f3f7f2}.stage b{color:#173f23}.waterbox{display:grid;grid-template-columns:1fr 1fr;gap:10px}.footer{text-align:center;color:#738078;padding:24px 0}
 </style>
 </head>
 <body>
 <div class="container">
 <section class="hero">
 <span class="badge">🌱 Nom Agri AI • Nepal</span>
-<h1>Know your farm profit before you plant.</h1>
-<p>A simple decision-support calculator for Nepalese farmers, growers and agriculture students. Enter your own numbers and see revenue, profit and break-even points.</p>
+<h1>Know your farm before you plant.</h1>
+<p>Farm economics + water planning + crop calendar + weather-risk screening in one simple decision-support tool.</p>
 </section>
+
+<div class="tabs">
+<button class="tab active" onclick="showTab('economics',this)">💰 Economics</button>
+<button class="tab" onclick="showTab('water',this)">💧 Water</button>
+<button class="tab" onclick="showTab('weather',this)">🌦️ Weather</button>
+<button class="tab" onclick="showTab('calendar',this)">📅 Crop Calendar</button>
+</div>
+
+<section id="economics" class="panel active">
 <div class="grid">
 <div class="card">
 <h2>Farm inputs</h2>
-<label>Crop</label><input id="crop" value="Tomato">
+<label>Crop</label>
+<select id="crop" onchange="cropChanged()">
+<option>Tomato</option><option>Potato</option><option>Cauliflower</option><option>Cucumber</option><option>Chilli</option><option>Maize</option><option>Rice</option><option>Wheat</option>
+</select>
 <label>Area (hectares)</label><input id="area" type="number" min="0" step="0.01" value="0.1">
 <label>Expected yield (kg/ha)</label><input id="yield" type="number" min="0" step="1" value="25000">
 <label>Selling price (NPR/kg)</label><input id="price" type="number" min="0" step="0.1" value="70">
-<label>Seed / planting material (NPR)</label><input id="seed" type="number" min="0" step="1" value="5000">
-<label>Fertilizer & manure (NPR)</label><input id="fert" type="number" min="0" step="1" value="18000">
-<label>Crop protection (NPR)</label><input id="protect" type="number" min="0" step="1" value="7000">
-<label>Labour (NPR)</label><input id="labour" type="number" min="0" step="1" value="25000">
-<label>Other costs (NPR)</label><input id="other" type="number" min="0" step="1" value="8000">
+<label>Seed / planting material (NPR)</label><input id="seed" type="number" min="0" value="5000">
+<label>Fertilizer & manure (NPR)</label><input id="fert" type="number" min="0" value="18000">
+<label>Crop protection (NPR)</label><input id="protect" type="number" min="0" value="7000">
+<label>Labour (NPR)</label><input id="labour" type="number" min="0" value="25000">
+<label>Other costs (NPR)</label><input id="other" type="number" min="0" value="8000">
 <button onclick="calculate()">Calculate farm economics</button>
-<p class="note">Example values are illustrative only. Replace them with your local farm estimates before making decisions.</p>
+<p class="note">Example values are illustrative. Replace them with local estimates.</p>
 </div>
 <div class="card">
-<h2 id="resultTitle">Your result</h2>
+<h2 id="resultTitle">Tomato economics</h2>
 <div class="results">
 <div class="metric"><small>Total production</small><strong id="production">—</strong></div>
 <div class="metric"><small>Revenue</small><strong id="revenue">—</strong></div>
@@ -47,30 +61,78 @@ label{display:block;font-weight:700;font-size:14px;margin:14px 0 6px}input,selec
 <div class="metric"><small>Break-even yield</small><strong id="beyield">—</strong></div>
 <div class="metric"><small>ROI</small><strong id="roi">—</strong></div>
 </div>
-<p class="note">This is a planning tool, not financial or agronomic advice. Actual results depend on yield, quality, prices, labour, losses and local conditions.</p>
 </div>
 </div>
+</section>
+
+<section id="water" class="panel">
+<div class="grid">
+<div class="card">
+<h2>💧 Water requirement</h2>
+<label>Crop</label><select id="waterCrop" onchange="waterChanged()"><option>Tomato</option><option>Potato</option><option>Cauliflower</option><option>Cucumber</option><option>Chilli</option><option>Maize</option><option>Rice</option><option>Wheat</option></select>
+<label>Area (hectares)</label><input id="waterArea" type="number" min="0" step="0.01" value="0.1" oninput="waterChanged()">
+<div class="waterbox">
+<div class="metric"><small>Indicative seasonal water</small><strong id="seasonWater">—</strong></div>
+<div class="metric"><small>Indicative weekly need</small><strong id="weekWater">—</strong></div>
+</div>
+<p class="note">These are planning ranges, not irrigation prescriptions. Actual crop water need changes with climate, soil, crop stage, rainfall and irrigation efficiency.</p>
+</div>
+<div class="card">
+<h2>How to use it</h2>
+<p>Use the water estimate to compare crop choices and size an irrigation plan. Later, Nom Agri AI can connect this module to rainfall forecasts, soil data and local evapotranspiration data for a more precise recommendation.</p>
+</div>
+</div>
+</section>
+
+<section id="weather" class="panel">
+<div class="grid">
+<div class="card">
+<h2>🌦️ Weather factor</h2>
+<p class="note">Enter the expected growing-season conditions. The tool screens them against a simple crop suitability range.</p>
+<label>Crop</label><select id="weatherCrop" onchange="weatherChanged()"><option>Tomato</option><option>Potato</option><option>Cauliflower</option><option>Cucumber</option><option>Chilli</option><option>Maize</option><option>Rice</option><option>Wheat</option></select>
+<label>Expected average temperature (°C)</label><input id="temp" type="number" value="24" oninput="weatherChanged()">
+<label>Expected rainfall during crop cycle (mm)</label><input id="rain" type="number" value="500" oninput="weatherChanged()">
+<div id="weatherResult" class="metric good"><small>Weather suitability</small><strong>—</strong></div>
+<p class="note">This is a screening factor, not a forecast. A future version can pull live weather and forecast data automatically.</p>
+</div>
+<div class="card">
+<h2>Weather-adjusted planning</h2>
+<div class="metric"><small>Suggested planning factor</small><strong id="weatherFactor">100%</strong></div>
+<p id="weatherAdvice" class="note">Enter conditions to see a planning flag.</p>
+</div>
+</div>
+</section>
+
+<section id="calendar" class="panel">
+<div class="card">
+<h2>📅 Crop calendar</h2>
+<label>Crop</label><select id="calCrop" onchange="renderCalendar()"><option>Tomato</option><option>Potato</option><option>Cauliflower</option><option>Cucumber</option><option>Chilli</option><option>Maize</option><option>Rice</option><option>Wheat</option></select>
+<div id="calendarList" class="calendar"></div>
+<p class="note">Calendar windows are generalized Nepal planning guides. Local altitude, variety, irrigation and season can shift the dates.</p>
+</div>
+</section>
+
 <div class="footer">Built for Nepal agriculture • Nom Agri AI</div>
 </div>
 <script>
 const n=id=>Number(document.getElementById(id).value)||0;
 const fmt=x=>new Intl.NumberFormat('en-NP',{maximumFractionDigits:0}).format(x);
-function calculate(){
- const area=n('area'), y=n('yield'), price=n('price');
- const production=area*y, revenue=production*price;
- const cost=n('seed')+n('fert')+n('protect')+n('labour')+n('other');
- const profit=revenue-cost, margin=revenue?profit/revenue*100:0;
- const bep=production?cost/production:0, bey=price?cost/price:0, roi=cost?profit/cost*100:0;
- document.getElementById('resultTitle').textContent=(document.getElementById('crop').value||'Farm')+' economics';
- document.getElementById('production').textContent=fmt(production)+' kg';
- document.getElementById('revenue').textContent='NPR '+fmt(revenue);
- document.getElementById('cost').textContent='NPR '+fmt(cost);
- document.getElementById('profit').textContent='NPR '+fmt(profit);
- document.getElementById('margin').textContent=margin.toFixed(1)+'%';
- document.getElementById('beprice').textContent='NPR '+bep.toFixed(2)+'/kg';
- document.getElementById('beyield').textContent=fmt(bey)+' kg';
- document.getElementById('roi').textContent=roi.toFixed(1)+'%';
-}
-calculate();
+const crops={
+Tomato:{water:550,weekly:35,temp:[18,30],rain:[400,900],calendar:[['Nursery','Jan–Feb / Jul–Aug'],['Transplant','Feb–Mar / Aug–Sep'],['Vegetative','Mar–Apr / Sep–Oct'],['Flower & fruit','Apr–Jun / Oct–Dec'],['Harvest','May–Jul / Nov–Jan']]},
+Potato:{water:500,weekly:35,temp:[15,25],rain:[350,700],calendar:[['Land prep','Sep–Oct'],['Planting','Oct–Nov'],['Tuber formation','Dec–Jan'],['Maturity','Jan–Feb'],['Harvest','Feb–Mar']]},
+Cauliflower:{water:450,weekly:30,temp:[15,25],rain:[350,700],calendar:[['Nursery','Jun–Aug'],['Transplant','Aug–Sep'],['Vegetative','Sep–Oct'],['Curd formation','Oct–Nov'],['Harvest','Nov–Jan']]},
+Cucumber:{water:500,weekly:40,temp:[20,30],rain:[400,800],calendar:[['Sowing','Feb–Mar / Aug–Sep'],['Vegetative','Mar–Apr / Sep–Oct'],['Flowering','Apr–May / Oct–Nov'],['Harvest','May–Jun / Nov–Dec']]},
+Chilli:{water:600,weekly:35,temp:[20,30],rain:[500,1000],calendar:[['Nursery','Jan–Feb'],['Transplant','Mar–Apr'],['Flowering','Apr–May'],['Fruit development','May–Jul'],['Harvest','Jun–Sep']]},
+Maize:{water:500,weekly:30,temp:[18,30],rain:[450,800],calendar:[['Land prep','Mar–Apr'],['Sowing','Apr–May'],['Vegetative','May–Jun'],['Tasseling','Jun–Jul'],['Harvest','Aug–Sep']]},
+Rice:{water:1200,weekly:80,temp:[22,32],rain:[800,1600],calendar:[['Nursery','May–Jun'],['Transplant','Jun–Jul'],['Tillering','Jul–Aug'],['Flowering','Aug–Sep'],['Harvest','Sep–Oct']]},
+Wheat:{water:450,weekly:25,temp:[12,24],rain:[300,600],calendar:[['Land prep','Oct–Nov'],['Sowing','Nov–Dec'],['Tillering','Dec–Jan'],['Grain filling','Feb–Mar'],['Harvest','Mar–Apr']]}
+};
+function showTab(id,btn){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
+function calculate(){const area=n('area'),y=n('yield'),price=n('price'),production=area*y,revenue=production*price,cost=n('seed')+n('fert')+n('protect')+n('labour')+n('other'),profit=revenue-cost,margin=revenue?profit/revenue*100:0,bep=production?cost/production:0,bey=price?cost/price:0,roi=cost?profit/cost*100:0;document.getElementById('resultTitle').textContent=(document.getElementById('crop').value||'Farm')+' economics';['production','revenue','cost','profit'].forEach((id,i)=>document.getElementById(id).textContent=[''+fmt(production)+' kg','NPR '+fmt(revenue),'NPR '+fmt(cost),'NPR '+fmt(profit)][i]);document.getElementById('margin').textContent=margin.toFixed(1)+'%';document.getElementById('beprice').textContent='NPR '+bep.toFixed(2)+'/kg';document.getElementById('beyield').textContent=fmt(bey)+' kg';document.getElementById('roi').textContent=roi.toFixed(1)+'%'}
+function cropChanged(){document.getElementById('waterCrop').value=document.getElementById('crop').value;document.getElementById('weatherCrop').value=document.getElementById('crop').value;document.getElementById('calCrop').value=document.getElementById('crop').value;waterChanged();weatherChanged();renderCalendar()}
+function waterChanged(){const c=crops[document.getElementById('waterCrop').value],a=n('waterArea');document.getElementById('seasonWater').textContent=fmt(c.water*a*10000/1000)+' m³';document.getElementById('weekWater').textContent=fmt(c.weekly*a*10000/1000)+' m³'}
+function weatherChanged(){const name=document.getElementById('weatherCrop').value,c=crops[name],t=n('temp'),r=n('rain'),tOk=t>=c.temp[0]&&t<=c.temp[1],rOk=r>=c.rain[0]&&r<=c.rain[1],score=(tOk?50:20)+(rOk?50:20),factor=score>=90?100:score>=70?85:60;document.getElementById('weatherResult').className='metric '+(score>=90?'good':score>=70?'warning':'warning');document.getElementById('weatherResult').innerHTML='<small>Weather suitability</small><strong>'+score+' / 100</strong>';document.getElementById('weatherFactor').textContent=factor+'%';document.getElementById('weatherAdvice').textContent=score>=90?'Conditions are within the screening ranges for this crop.':tOk?'Temperature looks suitable; check rainfall and irrigation.':rOk?'Rainfall looks suitable; temperature may create stress.':'Both temperature and rainfall are outside the screening ranges. Recheck variety, season and irrigation.'}
+function renderCalendar(){const name=document.getElementById('calCrop').value;document.getElementById('calendarList').innerHTML=crops[name].calendar.map(x=>'<div class="stage"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('')}
+calculate();waterChanged();weatherChanged();renderCalendar();
 </script>
 </body></html>

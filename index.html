@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nom Agri AI — Farm Profitability Calculator</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,sans-serif;background:#f4f7f2;color:#18321f}
+.container{max-width:1050px;margin:auto;padding:28px 18px}.hero{padding:30px 0 20px}.badge{display:inline-block;background:#dcefdc;padding:7px 12px;border-radius:999px;font-size:13px;font-weight:700}.hero h1{font-size:clamp(32px,6vw,56px);margin:14px 0 8px}.hero p{font-size:17px;color:#587060;max-width:700px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:750px){.grid{grid-template-columns:1fr}}
+.card{background:white;border:1px solid #dfe8df;border-radius:18px;padding:22px;box-shadow:0 8px 28px #173d1110}.card h2{margin-top:0;font-size:20px}
+label{display:block;font-weight:700;font-size:14px;margin:14px 0 6px}input,select{width:100%;padding:12px;border:1px solid #ccd9ce;border-radius:10px;font-size:16px;background:#fff}button{width:100%;margin-top:18px;padding:14px;border:0;border-radius:11px;background:#173f23;color:white;font-size:16px;font-weight:800;cursor:pointer}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#f3f7f2;border-radius:12px;padding:15px}.metric small{color:#617365}.metric strong{display:block;font-size:22px;margin-top:4px}.profit{background:#e3f4e5}.note{font-size:12px;color:#718078;margin-top:14px;line-height:1.5}.footer{text-align:center;color:#738078;padding:28px 0}
+</style>
+</head>
+<body>
+<div class="container">
+<section class="hero">
+<span class="badge">🌱 Nom Agri AI • Nepal</span>
+<h1>Know your farm profit before you plant.</h1>
+<p>A simple decision-support calculator for Nepalese farmers, growers and agriculture students. Enter your own numbers and see revenue, profit and break-even points.</p>
+</section>
+<div class="grid">
+<div class="card">
+<h2>Farm inputs</h2>
+<label>Crop</label><input id="crop" value="Tomato">
+<label>Area (hectares)</label><input id="area" type="number" min="0" step="0.01" value="0.1">
+<label>Expected yield (kg/ha)</label><input id="yield" type="number" min="0" step="1" value="25000">
+<label>Selling price (NPR/kg)</label><input id="price" type="number" min="0" step="0.1" value="70">
+<label>Seed / planting material (NPR)</label><input id="seed" type="number" min="0" step="1" value="5000">
+<label>Fertilizer & manure (NPR)</label><input id="fert" type="number" min="0" step="1" value="18000">
+<label>Crop protection (NPR)</label><input id="protect" type="number" min="0" step="1" value="7000">
+<label>Labour (NPR)</label><input id="labour" type="number" min="0" step="1" value="25000">
+<label>Other costs (NPR)</label><input id="other" type="number" min="0" step="1" value="8000">
+<button onclick="calculate()">Calculate farm economics</button>
+<p class="note">Example values are illustrative only. Replace them with your local farm estimates before making decisions.</p>
+</div>
+<div class="card">
+<h2 id="resultTitle">Your result</h2>
+<div class="results">
+<div class="metric"><small>Total production</small><strong id="production">—</strong></div>
+<div class="metric"><small>Revenue</small><strong id="revenue">—</strong></div>
+<div class="metric"><small>Total cost</small><strong id="cost">—</strong></div>
+<div class="metric profit"><small>Estimated profit</small><strong id="profit">—</strong></div>
+<div class="metric"><small>Profit margin</small><strong id="margin">—</strong></div>
+<div class="metric"><small>Break-even price</small><strong id="beprice">—</strong></div>
+<div class="metric"><small>Break-even yield</small><strong id="beyield">—</strong></div>
+<div class="metric"><small>ROI</small><strong id="roi">—</strong></div>
+</div>
+<p class="note">This is a planning tool, not financial or agronomic advice. Actual results depend on yield, quality, prices, labour, losses and local conditions.</p>
+</div>
+</div>
+<div class="footer">Built for Nepal agriculture • Nom Agri AI</div>
+</div>
+<script>
+const n=id=>Number(document.getElementById(id).value)||0;
+const fmt=x=>new Intl.NumberFormat('en-NP',{maximumFractionDigits:0}).format(x);
+function calculate(){
+ const area=n('area'), y=n('yield'), price=n('price');
+ const production=area*y, revenue=production*price;
+ const cost=n('seed')+n('fert')+n('protect')+n('labour')+n('other');
+ const profit=revenue-cost, margin=revenue?profit/revenue*100:0;
+ const bep=production?cost/production:0, bey=price?cost/price:0, roi=cost?profit/cost*100:0;
+ document.getElementById('resultTitle').textContent=(document.getElementById('crop').value||'Farm')+' economics';
+ document.getElementById('production').textContent=fmt(production)+' kg';
+ document.getElementById('revenue').textContent='NPR '+fmt(revenue);
+ document.getElementById('cost').textContent='NPR '+fmt(cost);
+ document.getElementById('profit').textContent='NPR '+fmt(profit);
+ document.getElementById('margin').textContent=margin.toFixed(1)+'%';
+ document.getElementById('beprice').textContent='NPR '+bep.toFixed(2)+'/kg';
+ document.getElementById('beyield').textContent=fmt(bey)+' kg';
+ document.getElementById('roi').textContent=roi.toFixed(1)+'%';
+}
+calculate();
+</script>
+</body></html>

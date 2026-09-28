@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1020"><link rel="manifest" href="manifest.json"><title>Nom LokSewa — Adhikrit Command Center</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top"><div class="brand"><span>NL</span><div><b>Nom LokSewa</b><small>Adhikrit Preparation System</small></div></div><button id="installBtn" class="ghost hidden">Install</button></header>
+<main>
+<section id="home" class="view active">
+<div class="hero"><div><p class="eyebrow">SECTION OFFICER • GAZETTED 3RD CLASS</p><h1>Your LokSewa preparation,<br><em>turned into a system.</em></h1><p class="sub">Syllabus-aware practice, mistake review, timed mocks and daily current-affairs intelligence — built for Nepal.</p><button class="primary" onclick="show('practice')">Start today's practice →</button></div><div class="scorecard"><span>Readiness</span><strong id="readiness">0%</strong><small>Based on practice data</small></div></div>
+<div class="grid three"><article><b>🎯 Adaptive Practice</b><p>Topic drills and instant explanations.</p></article><article><b>🧠 Mistake Engine</b><p>Save weak questions for spaced review.</p></article><article><b>📰 Daily Intelligence</b><p>Current affairs linked to exam-relevant themes.</p></article></div>
+</section>
+<section id="practice" class="view"><div class="section-head"><div><p class="eyebrow">PRACTICE ENGINE</p><h2>Today's MCQ Drill</h2></div><span id="qCount" class="pill"></span></div><div id="quiz"></div></section>
+<section id="mock" class="view"><div class="section-head"><div><p class="eyebrow">EXAM MODE</p><h2>Mini Mock</h2></div><button class="primary" onclick="startMock()">Start 20-question mock</button></div><div id="mockBox" class="panel"><p>Simulate pressure without wasting hours. Your result is saved locally.</p></div></section>
+<section id="review" class="view"><div class="section-head"><div><p class="eyebrow">RETENTION</p><h2>Mistake Notebook</h2></div></div><div id="mistakes"></div></section>
+<section id="plan" class="view"><div class="section-head"><div><p class="eyebrow">ROADMAP</p><h2>90-Day Adhikrit Plan</h2></div></div><div class="timeline"><article><span>01</span><div><b>Days 1–14</b><p>Baseline + Constitution + governance</p></div></article><article><span>02</span><div><b>Days 15–35</b><p>Public administration + management + federalism</p></div></article><article><span>03</span><div><b>Days 36–55</b><p>Development, economy, current affairs + reasoning</p></div></article><article><span>04</span><div><b>Days 56–75</b><p>Past papers + answer-writing + timed practice</p></div></article><article><span>05</span><div><b>Days 76–90</b><p>Full mocks + revision + interview/group test</p></div></article></div></section>
+<section id="news" class="view"><div class="section-head"><div><p class="eyebrow">INTELLIGENCE</p><h2>Current Affairs Desk</h2></div></div><div class="panel"><b>Source-first rule</b><p>Every current-affairs item in the production version should retain its source, publication date, topic tag and verification status. Official PSC/government sources take priority.</p><div class="chips"><span>Governance</span><span>Economy</span><span>Constitution</span><span>International</span><span>Science & tech</span></div></div></section>
+</main>
+<nav><button onclick="show('home')">⌂<small>Home</small></button><button onclick="show('practice')">✓<small>Practice</small></button><button onclick="show('mock')">⏱<small>Mock</small></button><button onclick="show('review')">🧠<small>Review</small></button><button onclick="show('plan')">◫<small>Plan</small></button></nav>
+<script src="app.js"></script><script>if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
+</body></html>
